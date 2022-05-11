@@ -1,0 +1,355 @@
+{
+  "visualizations": {
+    "viz_9MFkWEpu": {
+      "type": "splunk.singlevalue",
+      "title": "Best Price",
+      "dataSources": {
+        "primary": "ds_hQiwzZoQ"
+      },
+      "options": {
+        "unit": "$",
+        "unitPosition": "before",
+        "majorColor": "#53a051",
+        "backgroundColor": "transparent"
+      }
+    },
+    "viz_BPY91xBE": {
+      "type": "splunk.singlevalue",
+      "title": "Most Expensive",
+      "dataSources": {
+        "primary": "ds_SLOHqVVb"
+      },
+      "options": {
+        "unit": "$",
+        "unitPosition": "before",
+        "majorColor": "#dc4e41",
+        "backgroundColor": "transparent"
+      }
+    },
+    "viz_WQKTqbdX": {
+      "type": "splunk.singlevalue",
+      "title": "Cheapest Month",
+      "dataSources": {
+        "primary": "ds_DPyyXJJS"
+      },
+      "options": {
+        "majorColor": "#0877a6",
+        "backgroundColor": "transparent"
+      }
+    },
+    "viz_cAvJgiIT": {
+      "type": "splunk.table",
+      "title": "Prices By Date",
+      "dataSources": {
+        "primary": "prices"
+      },
+      "options": {
+        "columnFormat": {
+          "Date": {
+            "data": "> table | seriesByName(\"Date\") | formatByType(DateColumnFormatEditorConfig)"
+          }
+        },
+        "backgroundColor": "transparent",
+        "tableFormat": {
+          "rowBackgroundColors": "> table | seriesByIndex(0) | pick(tableAltRowBackgroundColorsByBackgroundColor)",
+          "headerBackgroundColor": "> backgroundColor | setColorChannel(tableHeaderBackgroundColorConfig)",
+          "rowColors": "> rowBackgroundColors | maxContrast(tableRowColorMaxContrast)",
+          "headerColor": "> headerBackgroundColor | maxContrast(tableRowColorMaxContrast)"
+        }
+      },
+      "context": {
+        "DateColumnFormatEditorConfig": {
+          "time": {
+            "format": "YYYY-MM-DD"
+          }
+        }
+      }
+    },
+    "viz_xkGfYK0H": {
+      "type": "splunk.markdown",
+      "options": {
+        "markdown": "# Flights to Toronto Pearson International Airport (YYZ)",
+        "fontColor": "#ffffff"
+      }
+    },
+    "viz_n77MY63R": {
+      "type": "splunk.rectangle",
+      "options": {
+        "fillColor": "#ffffff",
+        "strokeColor": "transparent",
+        "fillOpacity": 0.8
+      }
+    },
+    "viz_kErwl4Rq": {
+      "type": "splunk.rectangle",
+      "options": {
+        "fillColor": "#ffffff",
+        "strokeColor": "transparent",
+        "fillOpacity": 0.8
+      }
+    },
+    "viz_BwWKCu0f": {
+      "type": "splunk.rectangle",
+      "options": {
+        "fillColor": "#ffffff",
+        "strokeColor": "transparent",
+        "fillOpacity": 0.8
+      }
+    },
+    "viz_rauhvvvV": {
+      "type": "splunk.rectangle",
+      "options": {
+        "fillColor": "#ffffff",
+        "strokeColor": "transparent",
+        "fillOpacity": 0.8
+      }
+    }
+  },
+  "dataSources": {
+    "prices": {
+      "type": "ds.test",
+      "options": {
+        "data": {
+          "fields": [
+            {
+              "name": "Date",
+              "groupby_rank": "0"
+            },
+            {
+              "name": "Price"
+            }
+          ],
+          "columns": [
+            [
+              "2022-03-01",
+              "2022-03-02",
+              "2022-03-03",
+              "2022-03-04",
+              "2022-03-05",
+              "2022-03-06",
+              "2022-03-07",
+              "2022-03-08",
+              "2022-03-09",
+              "2022-03-10",
+              "2022-03-11",
+              "2022-03-12",
+              "2022-03-13",
+              "2022-03-14",
+              "2022-03-15",
+              "2022-03-16",
+              "2022-03-17",
+              "2022-03-18",
+              "2022-03-19",
+              "2022-03-20",
+              "2022-03-21",
+              "2022-03-22",
+              "2022-03-23",
+              "2022-03-24",
+              "2022-03-25",
+              "2022-03-26",
+              "2022-03-27",
+              "2022-03-28",
+              "2022-03-29",
+              "2022-03-30"
+            ],
+            [
+              "485",
+              "567",
+              "560",
+              "670",
+              "456",
+              "585",
+              "563",
+              "490",
+              "625",
+              "620",
+              "485",
+              "567",
+              "560",
+              "670",
+              "456",
+              "585",
+              "563",
+              "490",
+              "625",
+              "620",
+              "485",
+              "567",
+              "560",
+              "670",
+              "456",
+              "585",
+              "563",
+              "490",
+              "625",
+              "620"
+            ]
+          ]
+        }
+      }
+    },
+    "ds_hQiwzZoQ": {
+      "type": "ds.search",
+      "options": {
+        "query": "| makeresults\n| eval \"price\"=456",
+        "queryParameters": {
+          "earliest": "-15m",
+          "latest": "now"
+        }
+      },
+      "name": "Search_1"
+    },
+    "ds_SLOHqVVb": {
+      "type": "ds.search",
+      "options": {
+        "query": "| makeresults\n| eval \"price\"=675",
+        "queryParameters": {
+          "earliest": "-24h@h",
+          "latest": "now"
+        }
+      },
+      "name": "Search_2"
+    },
+    "ds_DPyyXJJS": {
+      "type": "ds.search",
+      "options": {
+        "query": "| makeresults\n| eval \"month\"=\"March\"",
+        "queryParameters": {
+          "earliest": "-24h@h",
+          "latest": "now"
+        }
+      },
+      "name": "Search_3"
+    }
+  },
+  "defaults": {
+    "dataSources": {
+      "ds.search": {
+        "options": {
+          "queryParameters": {
+            "latest": "$global_time.latest$",
+            "earliest": "$global_time.earliest$"
+          }
+        }
+      }
+    }
+  },
+  "inputs": {
+    "input_emK6A3Ua": {
+      "options": {
+        "token": "flight"
+      },
+      "title": "Flight Widget",
+      "type": "input.flightwidget"
+    }
+  },
+  "layout": {
+    "type": "absolute",
+    "options": {
+      "display": "auto-scale",
+      "backgroundImage": {
+        "sizeType": "cover",
+        "x": 0,
+        "y": 0,
+        "src": "/static/app/my-splunk-app/background.jpg"
+      },
+      "height": 750,
+      "showTitleAndDescription": false
+    },
+    "structure": [
+      {
+        "item": "viz_rauhvvvV",
+        "type": "block",
+        "position": {
+          "x": 320,
+          "y": 320,
+          "w": 560,
+          "h": 340
+        }
+      },
+      {
+        "item": "viz_BwWKCu0f",
+        "type": "block",
+        "position": {
+          "x": 820,
+          "y": 90,
+          "w": 340,
+          "h": 190
+        }
+      },
+      {
+        "item": "viz_kErwl4Rq",
+        "type": "block",
+        "position": {
+          "x": 430,
+          "y": 90,
+          "w": 340,
+          "h": 190
+        }
+      },
+      {
+        "item": "viz_n77MY63R",
+        "type": "block",
+        "position": {
+          "x": 40,
+          "y": 90,
+          "w": 340,
+          "h": 190
+        }
+      },
+      {
+        "item": "viz_9MFkWEpu",
+        "type": "block",
+        "position": {
+          "x": 40,
+          "y": 90,
+          "w": 340,
+          "h": 190
+        }
+      },
+      {
+        "item": "viz_BPY91xBE",
+        "type": "block",
+        "position": {
+          "x": 430,
+          "y": 90,
+          "w": 340,
+          "h": 190
+        }
+      },
+      {
+        "item": "viz_WQKTqbdX",
+        "type": "block",
+        "position": {
+          "x": 820,
+          "y": 90,
+          "w": 340,
+          "h": 190
+        }
+      },
+      {
+        "item": "viz_cAvJgiIT",
+        "type": "block",
+        "position": {
+          "x": 320,
+          "y": 320,
+          "w": 560,
+          "h": 340
+        }
+      },
+      {
+        "item": "viz_xkGfYK0H",
+        "type": "block",
+        "position": {
+          "x": 40,
+          "y": 30,
+          "w": 610,
+          "h": 30
+        }
+      }
+    ],
+    "globalInputs": ["input_emK6A3Ua"]
+  },
+  "description": "",
+  "title": "Conf22 Nusair-Caius"
+}
