@@ -8,7 +8,7 @@ import DashboardCore from '@splunk/dashboard-core';
 import { DashboardContextProvider } from '@splunk/dashboard-context';
 import EnterprisePreset from '@splunk/dashboard-presets/EnterprisePreset';
 
-import { FlightWidget } from './FlightWidget';
+import FlightWidget from './FlightWidget';
 
 // Dashboard Definition Files
 import attemptOne from './attempt_one.json';
