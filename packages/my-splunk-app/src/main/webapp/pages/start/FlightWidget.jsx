@@ -35,16 +35,19 @@ const parseValue = (value) => {
 };
 
 const FlightWidget = ({ onValueChange, value }) => {
+    const parsedValue = parseValue(value);
     const [open, setOpen] = useState(false);
-    const [origin, setOrigin] = useState('');
-    const [destination, setDestination] = useState('');
-    const [tripType, setTripType] = useState('');
-    const [priceMax, setPriceMax] = useState(0);
+    const [origin, setOrigin] = useState(parsedValue.origin || '');
+    const [destination, setDestination] = useState(parsedValue.destination || '');
+    const [tripType, setTripType] = useState(parsedValue.tripType || '');
+    const [priceMax, setPriceMax] = useState(parsedValue.priceMax || 0);
 
     const closeReasons = Dropdown.possibleCloseReasons.filter(
         (reason) => reason !== 'contentClick'
     );
-    const toggle = <Button appearance="toggle" label="Select Flight Parameters" isMenu />;
+    const toggle = (
+        <Button appearance="toggle" label={value || 'Select Flight Parameters'} isMenu />
+    );
 
     const handleChangeOrigin = useCallback((e, { value: val }) => {
         setOrigin(val);
@@ -143,6 +146,15 @@ FlightWidget.valueToTokens = (value, { token }) => {
         [`${token}.tripType`]: tripType,
         [`${token}.priceMax`]: priceMax == null ? undefined : `${priceMax}`,
     };
+};
+
+FlightWidget.tokensToValue = ({ tokens, tokenNamespace, tokenName }) => {
+    const origin = tokens?.[tokenNamespace]?.[`${tokenName}.origin`];
+    const destination = tokens?.[tokenNamespace]?.[`${tokenName}.destination`];
+    const tripType = tokens?.[tokenNamespace]?.[`${tokenName}.tripType`];
+    const priceMax = tokens?.[tokenNamespace]?.[`${tokenName}.priceMax`];
+
+    return toValue({ origin, destination, tripType, priceMax });
 };
 
 FlightWidget.propTypes = {
