@@ -9,6 +9,7 @@ import { DashboardContextProvider } from '@splunk/dashboard-context';
 import EnterprisePreset from '@splunk/dashboard-presets/EnterprisePreset';
 
 import FlightWidget from './FlightWidget';
+import CalendarViz from './CalendarViz';
 
 // Dashboard Definition Files
 import attemptOne from './attempt_one.json';
@@ -18,6 +19,10 @@ const themeProviderSettings = getThemeOptions(defaultTheme() || 'enterprise');
 
 const preset = {
     ...EnterprisePreset,
+    visualizations: {
+        ...EnterprisePreset.visualizations,
+        'splunk.calendar': CalendarViz,
+    },
     inputs: {
         ...EnterprisePreset.inputs,
         'input.flightwidget': FlightWidget,

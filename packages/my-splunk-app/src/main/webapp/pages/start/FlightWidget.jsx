@@ -13,7 +13,15 @@ const toValue = ({ origin, destination, priceMax, tripType } = {}) => {
     if (!origin || !destination || priceMax == null || !tripType) {
         return '';
     }
-    return `${origin},${destination},${tripType},${priceMax}`;
+    // tripType within our component is 'one-way' or 'round-trip', but the token
+    // value we set is 'Yes' or 'No'. We need to convert that to our local state
+    let tripTypeLocal = tripType;
+    if (tripType === 'Yes') {
+        tripTypeLocal = 'round-trip';
+    } else if (tripType === 'No') {
+        tripTypeLocal = 'one-way';
+    }
+    return `${origin},${destination},${tripTypeLocal},${priceMax}`;
 };
 
 const parseValue = (value) => {
