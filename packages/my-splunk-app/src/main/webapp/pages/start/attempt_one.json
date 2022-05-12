@@ -4,7 +4,7 @@
       "type": "splunk.singlevalue",
       "title": "Best Price",
       "dataSources": {
-        "primary": "ds_hQiwzZoQ"
+        "primary": "ds_ydVqHY6a"
       },
       "options": {
         "unit": "$",
@@ -41,7 +41,7 @@
       "type": "splunk.table",
       "title": "Prices By Date",
       "dataSources": {
-        "primary": "prices"
+        "primary": "ds_rLgqTCp6"
       },
       "options": {
         "columnFormat": {
@@ -188,21 +188,10 @@
         }
       }
     },
-    "ds_hQiwzZoQ": {
-      "type": "ds.search",
-      "options": {
-        "query": "| makeresults\n| eval \"price\"=456",
-        "queryParameters": {
-          "earliest": "-15m",
-          "latest": "now"
-        }
-      },
-      "name": "Search_1"
-    },
     "ds_SLOHqVVb": {
       "type": "ds.search",
       "options": {
-        "query": "| makeresults\n| eval \"price\"=675",
+        "query": "| inputlookup flight_data.csv\n| search Destination = \"$destination$\", Origin = \"$origin$\", Price<$max_price$, \"Round Trip\"= $roundtrip$\n| fields Date Price\n| stats max(Price)",
         "queryParameters": {
           "earliest": "-24h@h",
           "latest": "now"
@@ -220,6 +209,50 @@
         }
       },
       "name": "Search_3"
+    },
+    "ds_pIe9fSPg": {
+      "type": "ds.search",
+      "options": {
+        "query": "| inputlookup flight_data.csv \n| stats count by Origin",
+        "queryParameters": {
+          "earliest": "-15m",
+          "latest": "now"
+        }
+      },
+      "name": "Search_4"
+    },
+    "ds_QM9SVDcR": {
+      "type": "ds.search",
+      "options": {
+        "query": "| inputlookup flight_data.csv \n| stats count by Destination",
+        "queryParameters": {
+          "earliest": "-15m",
+          "latest": "now"
+        }
+      },
+      "name": "Search_5"
+    },
+    "ds_rLgqTCp6": {
+      "type": "ds.search",
+      "options": {
+        "query": "| inputlookup flight_data.csv\n| search Destination = \"$destination$\", Origin = \"$origin$\", Price<$max_price$, \"Round Trip\"= $roundtrip$\n| fields Date Price",
+        "queryParameters": {
+          "earliest": "-15m",
+          "latest": "now"
+        }
+      },
+      "name": "Search_6"
+    },
+    "ds_ydVqHY6a": {
+      "type": "ds.search",
+      "options": {
+        "query": "| inputlookup flight_data.csv\n| search Destination = \"$destination$\", Origin = \"$origin$\", Price<$max_price$, \"Round Trip\"= $roundtrip$\n| fields Date Price\n| stats min(Price)",
+        "queryParameters": {
+          "earliest": "-15m",
+          "latest": "now"
+        }
+      },
+      "name": "Search_7"
     }
   },
   "defaults": {
@@ -235,16 +268,6 @@
     }
   },
   "inputs": {
-    "input_4BSAY36j": {
-      "options": {
-        "defaultValue": 500,
-        "token": "min_price",
-        "max": 5000,
-        "step": 100
-      },
-      "title": "Price Min ($USD)",
-      "type": "input.number"
-    },
     "input_b0VV3OSE": {
       "options": {
         "defaultValue": 500,
@@ -267,27 +290,45 @@
             "value": "No"
           }
         ],
-        "defaultValue": "*",
-        "token": "Roundtrip"
+        "defaultValue": "Yes",
+        "token": "roundtrip"
       },
       "title": "Round Trip",
       "type": "input.dropdown"
     },
-    "input_zL6wTRmX": {
+    "input_xEOzFhYk": {
       "options": {
-        "defaultValue": "LaGuardia Airport (LGA)",
-        "token": "text_ZmBSKNEz"
+        "items": [
+          {
+            "label": "All",
+            "value": "*"
+          }
+        ],
+        "defaultValue": "*",
+        "token": "origin"
       },
       "title": "Origin",
-      "type": "input.text"
+      "type": "input.dropdown",
+      "dataSources": {
+        "primary": "ds_pIe9fSPg"
+      }
     },
-    "input_emK6A3Ua": {
+    "input_eVmGaXji": {
       "options": {
-        "defaultValue": "Default Text",
-        "token": "text_9AXkiKGt"
+        "items": [
+          {
+            "label": "All",
+            "value": "*"
+          }
+        ],
+        "defaultValue": "*",
+        "token": "destination"
       },
       "title": "Destination",
-      "type": "input.text"
+      "type": "input.dropdown",
+      "dataSources": {
+        "primary": "ds_QM9SVDcR"
+      }
     }
   },
   "layout": {
@@ -395,14 +436,8 @@
         }
       }
     ],
-    "globalInputs": [
-      "input_zL6wTRmX",
-      "input_emK6A3Ua",
-      "input_4BSAY36j",
-      "input_b0VV3OSE",
-      "input_AbFcnB0j"
-    ]
+    "globalInputs": ["input_xEOzFhYk", "input_eVmGaXji", "input_b0VV3OSE", "input_AbFcnB0j"]
   },
   "description": "",
-  "title": "Conf22 Nusair-Caius"
+  "title": "Conf22 DEV1619C"
 }
