@@ -58,7 +58,7 @@
       "type": "splunk.markdown",
       "options": {
         "markdown": "# Flights to $flight.destination$",
-        "fontColor": "#000000"
+        "fontColor": "#ffffff"
       }
     },
     "viz_n77MY63R": {
@@ -101,7 +101,7 @@
     "ds_QM9SVDcR": {
       "type": "ds.search",
       "options": {
-        "query": "| inputlookup flight_data.csv",
+        "query": "| inputlookup flight_data.csv| fields Origin Destination Price",
         "queryParameters": {
           "earliest": "-15m",
           "latest": "now"
@@ -147,13 +147,6 @@
   "inputs": {
     "input_xEOzFhYk": {
       "options": {
-        "items": [
-          {
-            "label": "All",
-            "value": "*"
-          }
-        ],
-        "defaultValue": "*",
         "token": "flight"
       },
       "title": "Flight",
@@ -243,9 +236,9 @@
         "type": "block",
         "position": {
           "x": 40,
-          "y": 30,
+          "y": 10,
           "w": 610,
-          "h": 30
+          "h": 100
         }
       }
     ],

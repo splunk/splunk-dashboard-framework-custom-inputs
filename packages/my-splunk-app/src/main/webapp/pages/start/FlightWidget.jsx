@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { BaseInput, withInputWrapper } from '@splunk/dashboard-inputs';
 import Dropdown from '@splunk/react-ui/Dropdown';
 import Button from '@splunk/react-ui/Button';
@@ -34,13 +34,27 @@ const parseValue = (value) => {
     };
 };
 
-const FlightWidget = ({ onValueChange, value }) => {
+const FlightWidget = ({ onValueChange, value, dataSources }) => {
     const parsedValue = parseValue(value);
     const [open, setOpen] = useState(false);
     const [origin, setOrigin] = useState(parsedValue.origin || '');
     const [destination, setDestination] = useState(parsedValue.destination || '');
     const [tripType, setTripType] = useState(parsedValue.tripType || '');
     const [priceMax, setPriceMax] = useState(parsedValue.priceMax || 0);
+
+    const data = useMemo(
+        () => dataSources?.primary?.data?.columns || {},
+        [dataSources?.primary?.data?.columns]
+    );
+    const uniqueOriginOptions = useMemo(() => {
+        const uniqueOrigins = [...new Set(data?.[0])];
+        return uniqueOrigins.map((o) => <ComboBox.Option key={o} value={o} />);
+    }, [data]);
+    const uniqueDestinationOptions = useMemo(() => {
+        const uniqueDestinations = [...new Set(data?.[1])];
+        return uniqueDestinations.map((d) => <ComboBox.Option key={d} value={d} />);
+    }, [data]);
+    const maximumPrice = useMemo(() => Math.max(...(data?.[2] || [])), [data]);
 
     const closeReasons = Dropdown.possibleCloseReasons.filter(
         (reason) => reason !== 'contentClick'
@@ -95,14 +109,12 @@ const FlightWidget = ({ onValueChange, value }) => {
             <div style={menuStyle}>
                 <ControlGroup label="Origin" labelPosition="top">
                     <ComboBox inline onChange={handleChangeOrigin} value={origin}>
-                        <ComboBox.Option value="Toronto" />
-                        <ComboBox.Option value="San Francisco" />
+                        {uniqueOriginOptions}
                     </ComboBox>
                 </ControlGroup>
                 <ControlGroup label="Destination" labelPosition="top">
                     <ComboBox inline onChange={handleChangeDestination} value={destination}>
-                        <ComboBox.Option value="Toronto" />
-                        <ComboBox.Option value="San Francisco" />
+                        {uniqueDestinationOptions}
                     </ComboBox>
                 </ControlGroup>
                 <ControlGroup label="Round-trip" labelPosition="top">
@@ -118,7 +130,7 @@ const FlightWidget = ({ onValueChange, value }) => {
                         min={0}
                         minLabel={null}
                         displayValue={`$${priceMax}`}
-                        max={1000}
+                        max={maximumPrice}
                         maxLabel={`$${priceMax}`}
                         step={10}
                         onChange={handleChangePriceMax}
@@ -143,7 +155,7 @@ FlightWidget.valueToTokens = (value, { token }) => {
     return {
         [`${token}.origin`]: origin,
         [`${token}.destination`]: destination,
-        [`${token}.tripType`]: tripType,
+        [`${token}.tripType`]: tripType === 'round-trip' ? 'Yes' : 'No',
         [`${token}.priceMax`]: priceMax == null ? undefined : `${priceMax}`,
     };
 };
