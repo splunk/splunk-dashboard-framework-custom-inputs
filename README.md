@@ -1,4 +1,13 @@
-# Contributing to Conf22Demo
+# Splunk Dashboard Framework Custom Inputs
+
+This project is an example of using the Splunk Dashboard Framework in a custom app using [@splunk/create](https://splunkui.splunk.com/Packages/create/Overview), and was shared at Splunk .conf22. The code shows how to introduce a custom input widget into a dashboard, and having it update tokens when the user interacts with it. A custom visualization from the nivo library is used to show the results of the search. 
+
+![image](https://user-images.githubusercontent.com/90855534/172906920-214a3e04-bd6e-4709-b897-93721a1ec1f0.png)
+
+
+
+
+# Contributing to This Repository
 
 ## Overview
 
